@@ -226,7 +226,7 @@ case $opcion in
 
         0)  #actualizar el script
             actualizar_script
-            sleep 3
+            sleep 2
             ;;
 
         1)  #añadir dispositivos
@@ -418,7 +418,7 @@ else
     #no hay internet
     software_necesario
 fi
-sleep 3
+sleep 2
 archivo="/home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config"
 if [ -f "$archivo" ] && grep -q "\[" "$archivo"; then
     configurar="SI"
