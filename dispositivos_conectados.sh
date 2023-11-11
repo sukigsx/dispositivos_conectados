@@ -73,8 +73,8 @@ fi
 }
 
 actualizar_script(){
-archivo_local="alias_bashrc.sh" # Nombre del archivo local
-ruta_repositorio="https://github.com/sukigsx/alias_bashrc.git" #ruta del repositorio para actualizar y clonar con git clone
+archivo_local="dispositivos_conectados.sh" # Nombre del archivo local
+ruta_repositorio="https://github.com/sukigsx/dispositivos_conectados.git" #ruta del repositorio para actualizar y clonar con git clone
 
 # Obtener la ruta del script
 descarga=$(dirname "$(readlink -f "$0")")
@@ -405,17 +405,17 @@ done
 # EMPIEZA LO GORDO
 clear
 echo ""
-#conexion
-#echo ""
-#if [ $conexion = "SI" ]
-#then
-#    #si hay internet
-#    software_necesario
-#    actualizar_script
-#else
-#    #no hay internet
-#    software_necesario
-#fi
+conexion
+echo ""
+if [ $conexion = "SI" ]
+then
+    #si hay internet
+    software_necesario
+    actualizar_script
+else
+    #no hay internet
+    software_necesario
+fi
 
 archivo="/home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config"
 if [ -f "$archivo" ] && grep -q "\[" "$archivo"; then
