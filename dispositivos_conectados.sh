@@ -387,6 +387,7 @@ case $opcion in
             ;;
 
         90) #opcion 3
+            clear
             echo '# DISPOSITIVOS_CONECTADOS
 
 Este script en bash es una herramienta de administración para verificar el estado de dispositivos en una red.
@@ -482,7 +483,7 @@ Realiza un escaneo de los dispositivos definidos en el archivo de configuración
 
 ## En resumen
 En resumen, el script es una herramienta interactiva para administrar una lista de dispositivos en una red, permitiendo agregar, eliminar, editar y escanear dispositivos, así como realizar otras acciones de administración.'
-echo "popo"
+read -p  " Pulsa una tecla para continuar" p
             ;;
 
         99) #salir
