@@ -225,6 +225,7 @@ read opcion
 case $opcion in
 
         0)  #actualizar el script
+            actualizar_script
             ;;
 
         1)  #añadir dispositivos
