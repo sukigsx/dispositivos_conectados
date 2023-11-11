@@ -395,7 +395,7 @@ case $opcion in
 
         *)      #se activa cuando se introduce una opcion no controlada del menu
                 echo "";
-                echo -e " ${amarillo}OPCION NO DISPONIBLE EN EL MENU.    Seleccion 0, 1, 2, 3, 4, 5, 6,7, 90 o 99 ${borra_colores}";
+                echo -e " ${amarillo}OPCION NO DISPONIBLE EN EL MENU.    Seleccion 0, 1, 2, 3, 4, 5, 90 o 99 ${borra_colores}";
                 echo -e " ${amarillo}PRESIONA ENTER PARA CONTINUAR ........${borra_colores}";
                 echo "";
                 read pause;;
