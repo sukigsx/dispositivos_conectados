@@ -93,3 +93,9 @@ Realiza un escaneo de los dispositivos definidos en el archivo de configuración
 
 ## En resumen
 En resumen, el script es una herramienta interactiva para administrar una lista de dispositivos en una red, permitiendo agregar, eliminar, editar y escanear dispositivos, así como realizar otras acciones de administración.
+
+## Instalacion
+
+Clonar repositorio con el siguiente comando git clone https://github.com/sukigsx/dispositivos_conectados.git
+
+# ESPERO OS GUSTE......
