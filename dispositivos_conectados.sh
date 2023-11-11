@@ -558,3 +558,5 @@ echo ""
 printf "${azul} Escaneo Terminado. Pulsa una tecla para continuar.${borra_colores}\n"
 echo "----------------------------------------------------"
 echo ""
+read -p " Pulsa una tecla para continuar" p
+echo ""
