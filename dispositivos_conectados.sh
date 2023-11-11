@@ -558,5 +558,9 @@ echo ""
 printf "${azul} Escaneo Terminado. Pulsa una tecla para continuar.${borra_colores}\n"
 echo "----------------------------------------------------"
 echo ""
-read -p " Pulsa una tecla para continuar" p
+read -p " Quieres entrar al menu? (s/n)-> " sn
+if [ $sn = "s" ]
+then
+    menu
+fi
 echo ""
