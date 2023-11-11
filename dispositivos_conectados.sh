@@ -166,7 +166,7 @@ do
     }
 
     # Solicitar y validar la dirección IP
-    echo -e "${azul} Introduce ( s para salir ), ( Ej. 192.168.1.1 router ).${borra_colores}"
+    echo -e "${azul} Introduce ( s para salir ), ( Ej. router 192.168.1.1 ).${borra_colores}"
     read -p " Dime un Nombre Dispositivo espacio y su dirección IP -> " name ip
     echo ""
     if  [ "$name" == "s" ]; then
@@ -269,7 +269,7 @@ case $opcion in
                 }
 
                 # Solicitar y validar la dirección IP
-                echo -e "${azul} Introduce ( s para salir ), ( Ej. 192.168.1.1 router ).${borra_colores}"
+                echo -e "${azul} Introduce ( s para salir ), ( Ej. router 192.168.1.1 ).${borra_colores}"
                 read -p " Dime un Nombre Dispositivo espacio y su dirección IP -> " name ip
                 echo ""
                 if  [ "$name" == "s" ]; then
