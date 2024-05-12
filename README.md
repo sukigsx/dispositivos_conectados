@@ -96,6 +96,11 @@ En resumen, el script es una herramienta interactiva para administrar una lista 
 
 ## Instalacion
 
-Clonar repositorio con el siguiente comando git clone https://github.com/sukigsx/dispositivos_conectados.git
+Clonar repositorio con el siguiente comando:
 
+    git clone https://github.com/sukigsx/dispositivos_conectados.git
+Tambien puedes utilizar mi script (ejecutar_escripts), en el cual puedes instalar todos mis script del repositorio.
+
+    git clone https://github.com/sukigsx/ejecutar_scripts.git
+# Espero od guste !!!!!!
 # ESPERO OS GUSTE......
