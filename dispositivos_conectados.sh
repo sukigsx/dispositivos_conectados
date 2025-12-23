@@ -9,7 +9,7 @@ azul="\e[0;34m\033[1m"
 amarillo="\e[0;33m\033[1m"
 rosa="\e[0;35m\033[1m"
 turquesa="\e[0;36m\033[1m"
-borra_colores="\033[0m\e[0m" #borra colores
+borra_colores="\033[0m\e[0m" #borra coloress
 
 #toma el control al pulsar control + c
 trap ctrl_c INT
