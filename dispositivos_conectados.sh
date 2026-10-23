@@ -525,7 +525,7 @@ case $opcion in
 
         3)  #editar fichero de configuracion
             clear
-            echo -e "${rosa}"; figlet Editar; echo -e "${borra_colores}"
+            menu_info
             sleep 1
             nano /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config
             ;;
