@@ -496,8 +496,7 @@ case $opcion in
             while true
             do
                 clear
-                echo -e "${rosa}"; figlet Eliminar; echo -e "${borra_colores}"
-                echo ""
+                menu_info
                 echo -e "${verde}- Listado de tus dispositivos actuales -${borra_colores}"
                 echo ""
                 tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[][]=+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t
