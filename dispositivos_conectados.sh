@@ -606,8 +606,9 @@ Llama a la función ctrl_c y sale del script.
 
 ${azul}## En resumen${borra_colores}
 El script es una herramienta interactiva para administrar una lista de dispositivos en una red, permitiendo agregar, eliminar, editar y escanear dispositivos, así como realizar otras acciones de administración."
-echo ""
+echo -e "${amarillo}"
 read -p  " Pulsa una tecla para continuar" p
+echo -e "${borra_colores}"
             ;;
 
         99) #salir
