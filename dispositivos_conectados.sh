@@ -568,46 +568,44 @@ case $opcion in
         90) #opcion 3
             clear
             echo ""
-            echo '# DISPOSITIVOS_CONECTADOS
+            echo -e "${azul}# DISPOSITIVOS_CONECTADOS${borra_colores}
 
-Este script en bash es una herramienta de administración para verificar el estado de dispositivos en una red.
+${azul}## Opciones${borra_colores} del Menú:${borra_colores}
 
-## Opciones del Menú:
-
-- Opción 0: Actualizar el Script
+${azul}- Opción 0:${borra_colores} Actualizar el Script
 Llama a la función actualizar_script que probablemente se define en algún lugar del script.
 
-- Opción 1: Incluir Dispositivos
+${azul}- Opción 1: Incluir Dispositivos${borra_colores}
 Muestra una lista de dispositivos actuales.
 Solicita al usuario ingresar el nombre y la dirección IP de un dispositivo.
 Verifica la validez de la dirección IP y el nombre.
 Agrega la entrada al archivo de configuración si la información es válida.
 
-- Opción 2: Eliminar Dispositivos
+${azul}- Opción 2: Eliminar Dispositivos${borra_colores}
 Muestra una lista de dispositivos actuales.
 Solicita al usuario ingresar el nombre del dispositivo a eliminar (puede ser múltiple).
 Elimina las entradas correspondientes del archivo de configuración.
 
-- Opción 3: Editar el Fichero de Configuración
+${azul}- Opción 3: Editar el Fichero de Configuración${borra_colores}
 Abre el editor nano para editar el archivo de configuración.
 
-- Opción 4: Desinstalar
+${azul}- Opción 4: Desinstalar${borra_colores}
 Pregunta al usuario si está seguro de desinstalar.
 Elimina el archivo de configuración y el propio script si el usuario confirma.
 
-- Opción 5: Escanear Dispositivos
+${azul}- Opción 5: Escanear Dispositivos${borra_colores}
 Comprueba la existencia de un archivo de configuración.
 Realiza un escaneo de dispositivos en la red utilizando el comando ping.
 Muestra el estado de cada dispositivo (encendido o apagado).
 
-- Opción 90: Ayuda
+${azul}- Opción 90: Ayuda${borra_colores}
 No hay detalles sobre lo que hace esta opción en el script proporcionado.
 
-- Opción 99: Salir
+${azul}- Opción 99: Salir${borra_colores}
 Llama a la función ctrl_c y sale del script.
 
-## En resumen
-El script es una herramienta interactiva para administrar una lista de dispositivos en una red, permitiendo agregar, eliminar, editar y escanear dispositivos, así como realizar otras acciones de administración.'
+${azul}## En resumen${borra_colores}
+El script es una herramienta interactiva para administrar una lista de dispositivos en una red, permitiendo agregar, eliminar, editar y escanear dispositivos, así como realizar otras acciones de administración."
 echo ""
 read -p  " Pulsa una tecla para continuar" p
             ;;
