@@ -327,7 +327,7 @@ do
         echo ""
     else
         echo ""
-        tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[[\]=]+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t; echo ""
+        tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[][]=+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t; echo ""
         echo -e "${verde} - Listado finalizado -${borra_colores}"
         echo ""
     fi
@@ -430,7 +430,9 @@ case $opcion in
                 echo ""
                 echo -e "${verde}- Listado de tus dispositivos actuales -${borra_colores}"
                 echo ""
-                tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[[\]=]+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t; echo ""
+                #tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[][]=+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t; echo ""
+                tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[][]=+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t
+echo ""
                 echo -e "${verde} - Listado finalizado -${borra_colores}"
                 echo ""
                 # Pide la dirección IP
@@ -498,7 +500,7 @@ case $opcion in
                 echo ""
                 echo -e "${verde}- Listado de tus dispositivos actuales -${borra_colores}"
                 echo ""
-                tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[[\]=]+' '{print "  Dispositivo = ", "\033[32m" $3 "\033[0m"}' | column -t; echo ""
+                tail -n +2 /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config | awk -F'[][]=+' '{print "\033[32m" $3 "\033[0m =", "\033[32m" $2 "\033[0m"}' | column -t; echo ""
                 echo -e "${verde} - Listado finalizado -${borra_colores}"
                 echo ""
                 # Pide la dirección IP
@@ -530,8 +532,7 @@ case $opcion in
 
         4)  #Desistalar (Se elimina completamente de tu sistema)
             clear
-            echo -e "${rojo}"; figlet Desistalar; echo -e "${borra_colores}"
-            echo -e "${rojo}"
+            menu_info
             read -p "¿ Seguro que deseas eliminar ? (s/n) -> " sn
             echo -e "${borra_colores}"
             if [ $sn = "s" ] >/dev/null 2>&1; then
@@ -552,7 +553,7 @@ case $opcion in
 
         5)  #escanear
             clear
-            echo -e "${rosa}"; figlet Escanear; echo -e "${borra_colores}"
+            menu_info
             archivo="/home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config"
             if [ -f "$archivo" ] && grep -q "\[" "$archivo"; then
                 echo ""
