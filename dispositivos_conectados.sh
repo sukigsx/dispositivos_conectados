@@ -1,13 +1,11 @@
 #!/bin/bash
-#ping figlet git diff
-#!/usr/bin/env bash
 
 #VARIABLES PRINCIPALES
 # con export son las variables necesarias para exportar al los siguientes script
 #variables para el menu_info
 
-export NombreScript="ppsskjhlkjfgbgbfghlkjh"
-export DescripcionDelScript="PRUEBA DE MEJORA"
+export NombreScript="DispositivosConectados"
+export DescripcionDelScript="Herramienta de administración para verificar el estado de dispositivos en una red"
 export Correo="scripts@mbbsistemas.es"
 export Web="https://repositorio.mbbsistemas.es"
 export version="1.0"
@@ -21,9 +19,9 @@ ruta_ejecucion=$(dirname "$(readlink -f "$0")") #es la ruta de ejecucion del scr
 ruta_escritorio=$(xdg-user-dir DESKTOP) #es la ruta de tu escritorio sin la / al final
 
 # VARIABLES PARA LA ACTUALIZAION CON GITHUB
-NombreScriptActualizar="plpl.sh" #contiene el nombre del script para poder actualizar desde github
-DireccionGithub="https://github.com/sukigsx/pruebas.git" #contiene la direccion de github para actualizar el script
-nombre_carpeta_repositorio="plpl" #poner el nombre de la carpeta cuando se clona el repo para poder eliminarla
+NombreScriptActualizar="dispositivos_conectados.sh" #contiene el nombre del script para poder actualizar desde github
+DireccionGithub="https://github.com/sukigsx/dispositivos_conectados.git" #contiene la direccion de github para actualizar el script
+nombre_carpeta_repositorio="dispositivos_conectados" #poner el nombre de la carpeta cuando se clona el repo para poder eliminarla
 
 # VARIABLES DE SOFTWARE NECESARIO
 # Asociamos comandos con los paquetes correspondientes.
@@ -317,12 +315,7 @@ vacio="si"
 while true
 do
     clear
-    echo -e "${rosa}"; figlet sukigsx; echo -e "${borra_colores}"
-    echo ""
-    echo -e "${verde} Diseñado por sukigsx / Contacto:   scripts@mbbsistemas.es${borra_colores}"
-    echo -e "${verde}                                    https://repositorio.mbbsistemas.es${borra_colores}"
-    echo ""
-    echo -e "${verde} Nombre del script < $0 > Comprueba si los dispositivos estan activos.  ${borra_colores}"
+    menu_info
     echo ""
     echo -e "${amarillo} - CONFIGURACION INICIAL -${borra_colores}"
     echo ""
