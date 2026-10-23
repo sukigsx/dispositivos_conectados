@@ -728,7 +728,8 @@ done
 #    menu
 #fi
 
-###############333
+
+
 #logica de inicio
 clear
 menu_info
@@ -784,20 +785,7 @@ sleep 2
 clear
 menu_info
 
-
-
-
-
-
-
-
-
-
-
 #escanea directo
-echo "--------------"
-echo -e "${verde} Cargar el menu = ${borra_colores}$0 -m"
-echo ""
 echo ""
 echo -e "${azul} Comprobando dispositivos en tu red.${borra_colores}\n"
 source /home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config
