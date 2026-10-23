@@ -1,66 +1,288 @@
 #!/bin/bash
+#ping figlet git diff
+#!/usr/bin/env bash
 
+#VARIABLES PRINCIPALES
+# con export son las variables necesarias para exportar al los siguientes script
+#variables para el menu_info
+
+export NombreScript="ppsskjhlkjfgbgbfghlkjh"
+export DescripcionDelScript="PRUEBA DE MEJORA"
+export Correo="scripts@mbbsistemas.es"
+export Web="https://repositorio.mbbsistemas.es"
+export version="1.0"
+conexion="Sin comprobar"
+software="Sin comprobar"
+actualizado="Sin comprobar"
+paqueteria="No detectada"
+
+# VARIABLE QUE RECOJEN LAS RUTAS
+ruta_ejecucion=$(dirname "$(readlink -f "$0")") #es la ruta de ejecucion del script sin la / al final
+ruta_escritorio=$(xdg-user-dir DESKTOP) #es la ruta de tu escritorio sin la / al final
+
+# VARIABLES PARA LA ACTUALIZAION CON GITHUB
+NombreScriptActualizar="plpl.sh" #contiene el nombre del script para poder actualizar desde github
+DireccionGithub="https://github.com/sukigsx/pruebas.git" #contiene la direccion de github para actualizar el script
+nombre_carpeta_repositorio="plpl" #poner el nombre de la carpeta cuando se clona el repo para poder eliminarla
+
+# VARIABLES DE SOFTWARE NECESARIO
+# Asociamos comandos con los paquetes correspondientes.
+# Formato si cambian: [comando]="paquete_debian / paquete_redhat / paquete_arch"
+# Formato si son iguales: [comando]="paquete_unico"
+declare -A requeridos
+requeridos=(
+    # Requeridos para poder actualizar
+        [git]="git/git/git"
+        [diff]="diffutils/diffutils/diffutils"
+        [sudo]="sudo/sudo/sudo"
+        [ping]="iputils-ping/iputils/iputils/"
+        [xdg-user-dir]="xdg-user-dirs/xdg-user-dirs/xdg-user-dirs"
+
+    # Requeridos para el script en si
+    #[fzf]="fzf"
+    #[awk]="gawk/gawk/gawk"
+)
+###########################
+## FUNCIONES PRINCIPALES ##
+###########################
 #colores
-#ejemplo: echo -e "${verde} La opcion (-e) es para que pille el color.${borra_colores}"
-
 rojo="\e[0;31m\033[1m" #rojo
 verde="\e[;32m\033[1m"
 azul="\e[0;34m\033[1m"
 amarillo="\e[0;33m\033[1m"
 rosa="\e[0;35m\033[1m"
 turquesa="\e[0;36m\033[1m"
-borra_colores="\033[0m\e[0m" #borra coloress
+borra_colores="\033[0m\e[0m" #borra colores
 
 #toma el control al pulsar control + c
 trap ctrl_c INT
 function ctrl_c()
 {
 clear
-figlet -c Gracias por
-figlet -c utilizar mi
-figlet -c script
-wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
+echo ""
+echo -e "${azul} GRACIAS POR UTILIZAR MI SCRIPT${borra_colores}"
+echo ""
+sleep 1
 exit
 }
 
-software_necesario(){
+menu_info(){
+# muestra el menu de sukigsx
 echo ""
-echo -e " Comprobando el software necesario."
+echo -e "${rosa}            _    _                  ${azul}   Nombre del script${borra_colores} $NombreScript"
+echo -e "${rosa}  ___ _   _| | _(_) __ _ _____  __  ${azul}   Descripcion${borra_colores} $DescripcionDelScript"
+echo -e "${rosa} / __| | | | |/ / |/ _\ / __\ \/ /  ${azul}   Version            =${borra_colores} $version"
+echo -e "${rosa} \__ \ |_| |   <| | (_| \__ \>  <   ${azul}   Conexion Internet  =${borra_colores} $conexion"
+echo -e "${rosa} |___/\__,_|_|\_\_|\__, |___/_/\_\  ${azul}   Software necesario =${borra_colores} $software"
+echo -e "${rosa}                  |___/             ${azul}   Actualizado        =${borra_colores} $actualizado"
+echo -e "${rosa}                                    ${azul}   Sistema paqueteria =${borra_colores} $paqueteria"
+echo -e ""
+echo -e "${azul} Contacto:${borra_colores} ( Correo${rosa} $Correo${borra_colores} ) ( Web${rosa} $Web${borra_colores} )${borra_colores}"
 echo ""
-software="ping figlet git diff" #ponemos el foftware a instalar separado por espacion dentro de las comillas ( soft1 soft2 soft3 etc )
-for paquete in $software
-do
-which $paquete 2>/dev/null 1>/dev/null 0>/dev/null #comprueba si esta el programa llamado programa
-sino=$? #recojemos el 0 o 1 del resultado de which
-contador="1" #ponemos la variable contador a 1
-    while [ $sino -gt 0 ] #entra en el bicle si variable programa es 0, no lo ha encontrado which
-    do
-        if [ $contador = "4" ] || [ $conexion = "no" ] 2>/dev/null 1>/dev/null 0>/dev/null #si el contador es 4 entre en then y sino en else
-        then #si entra en then es porque el contador es igual a 4 y no ha podido instalar o no hay conexion a internet
-            clear
-            echo ""
-            echo -e " ${amarillo}NO se ha podido instalar ${rojo}$paquete${amarillo}.${borra_colores}"
-            echo -e " ${amarillo}Intentelo usted con la orden: (${borra_colores}sudo apt install $paquete ${amarillo})${borra_colores}"
-            echo -e ""
-            echo -e " ${rojo}No se puede ejecutar el script sin el software necesario.${borra_colores}"
-            echo ""; read p
-            echo ""
-            exit
-        else #intenta instalar
-            echo " Instalando $paquete. Intento $contador/3."
-            sudo apt install $paquete -y 2>/dev/null 1>/dev/null 0>/dev/null
-            let "contador=contador+1" #incrementa la variable contador en 1
-            which $paquete 2>/dev/null 1>/dev/null 0>/dev/null #comprueba si esta el programa en tu sistema
-            sino=$? ##recojemos el 0 o 1 del resultado de which
+}
+
+#comprobar si hay actualizaciones y que lo marque en el menu_info y tambien pregunta si quieres actualizar
+comprobar_actualizaciones(){
+
+    git clone $DireccionGithub /tmp/comprobar >/dev/null 2>&1
+    diff $ruta_ejecucion/$NombreScriptActualizar /tmp/comprobar/$NombreScriptActualizar >/dev/null 2>&1
+
+    if [ $? = 0 ]
+    then
+        #esta actualizado, solo lo comprueba
+        actualizado="SI"
+        chmod -R +w /tmp/comprobar
+        rm -R /tmp/comprobar
+    else
+        #hay que actualizar, comprueba y actualiza
+        echo ""
+        echo -e "${amarillo} Existe una actualizacion del script${borra_colores}"
+        read -p " Quieres actualizar ? (S/n): " sino
+        if [[ $sino == [sS] ]]; then
+            actualizar_script
+        else
+            actualizado="NO"
         fi
+        chmod -R +w /tmp/comprobar
+        rm -R /tmp/comprobar
+    fi
+}
+
+#funcion para actualizar el script
+actualizar_script(){
+    git clone $DireccionGithub /tmp/comprobar >/dev/null 2>&1
+
+    cp -r /tmp/comprobar/* $ruta_ejecucion
+    chmod -R +w /tmp/comprobar
+    rm -R /tmp/comprobar
+    echo ""
+    echo -e "${amarillo} Sera necesario ejecutarlo de nuevo.${borra_colores}"
+
+    printf " Actualizando... "
+    for i in {1..20}; do
+        printf "#"
+        sleep 0.1
     done
-echo -e " [${verde}ok${borra_colores}] $paquete."
-software="SI"
-done
+    printf " [ \e[32mOK\e[0m ]\n"
+
+    echo ""
+    sleep 1
+    exit
+}
+
+# Funcion para comprobar el software necesario
+software_necesario(){
+    # Detectamos la paqueteria y establecemos el idx_distro antes de evaluar la matriz
+    paqueteria
+
+    echo ""
+    echo -e "${azul} Comprobando el software necesario.${borra_colores}"
+    echo ""
+
+    for comando in "${!requeridos[@]}"; do
+        # Evaluamos si el valor de la matriz contiene variantes por barra '/'
+        if [[ "${requeridos[$comando]}" == *"/"* ]]; then
+            paquete_real=$(echo "${requeridos[$comando]}" | cut -d'/' -f$idx_distro)
+        else
+            paquete_real="${requeridos[$comando]}"
+        fi
+
+        command -v "$comando" &>/dev/null
+        sino=$?
+        contador=1
+        while [ $sino -ne 0 ]; do
+            if [ $contador -ge 4 ] || [ "$conexion" = "no" ]; then
+                clear
+                menu_info
+                echo -e " ${amarillo}NO se puede ejecutar el script sin los paquetes necesarios ${rojo}$paquete_real${amarillo}.${borra_colores}"
+                echo -e " ${amarillo}NO se ha podido instalar ${rojo}$paquete_real${amarillo}.${borra_colores}"
+                echo -e " ${amarillo}Inténtelo usted con: (${borra_colores}$instalar $paquete_real${amarillo})${borra_colores}"
+                echo ""
+                echo -e "${azul} Listado de los paquetes necesarios para poder ejecutar el script:${borra_colores}"
+
+                # Listar los nombres traducidos de los paquetes para comodidad del usuario
+                for cmd_lista in "${!requeridos[@]}"; do
+                    if [[ "${requeridos[$cmd_lista]}" == *"/"* ]]; then
+                        echo -e "     $(echo "${requeridos[$cmd_lista]}" | cut -d'/' -f$idx_distro)"
+                    else
+                        echo -e "     ${requeridos[$cmd_lista]}"
+                    fi
+                done
+
+                echo ""
+                echo -e " ${rojo}No se puede ejecutar el script sin todo el software necesario.${borra_colores}"
+                echo ""
+                exit 1
+            else
+                echo -e "${amarillo} Se necesita instalar ${borra_colores}$comando${amarillo} para la ejecucion del script${borra_colores}"
+                echo " Instalando $paquete_real. Intento $contador/3."
+
+                # Ejecución de la instalación silenciosa
+                $instalar "$paquete_real" &>/dev/null
+
+                let "contador=contador+1"
+                command -v "$comando" &>/dev/null
+                sino=$?
+            fi
+        done
+        echo -e " [${verde}ok${borra_colores}] $comando ($paquete_real)."
+    done
+
+    echo ""
+    echo -e "${azul} Todo el software ${verde}OK${borra_colores}"
+    software="SI"
+}
+
+# Función que comprueba si se ejecuta como root
+check_root() {
+    #clear
+    #menu_info
+  if [ "$EUID" -ne 0 ]; then
+    #echo ""
+    #echo -e "${amarillo} Se necesita privilegios de root ingresa la contraseña.${borra_colores}"
+
+    # Pedir contraseña para sudo
+    #echo -e ""
+
+    # Validar contraseña mediante sudo -v (verifica sin ejecutar comando)
+    if sudo -v; then
+      echo ""
+      echo -e "${verde} Autenticación correcta. Ejecutando como root...${borra_colores}"; sleep 2
+      # Reejecuta el script como root
+      #exec sudo "$0" "$@"
+    else
+      clear
+      menu_info
+      echo -e "${rojo} Contraseña incorrecta o acceso denegado. Saliendo del script.${borra_colores}"
+      echo ""
+      echo -e "${azul} Listado de los paquetes necesarios para poder ejecutar el script:${borra_colores}"
+      for elemento in "${requeridos[@]}"; do
+        echo -e "     $elemento"
+      done
+      echo ""
+      echo -e "${azul} GRACIAS POR UTILIZAR MI SCRIPT${borra_colores}"
+     echo ""; exit
+    fi
+  fi
+}
+
+# Funcion de detectar sistema de paquetado para instalar
+paqueteria(){
+    echo ""
+    echo -e "${azul} Detectando sistema de paquetería...${borra_colores}"
+    echo ""
+
+    if command -v apt >/dev/null 2>&1; then
+        echo -e "${verde} Sistema de paquetería detectado: APT (Debian, Ubuntu, Mint, etc.)${borra_colores}"
+        instalar="sudo apt install -y"
+        paqueteria="apt"
+        idx_distro=1
+
+    elif command -v dnf >/dev/null 2>&1; then
+        echo -e "${verde} Sistema de paquetería detectado: DNF (Fedora, RHEL, Rocky, AlmaLinux)${borra_colores}"
+        instalar="sudo dnf install -y"
+        paqueteria="dnf"
+        idx_distro=2
+
+    elif command -v pacman >/dev/null 2>&1; then
+        echo -e "${verde} Sistema de paquetería detectado: PACMAN (Arch Linux, Manjaro)${borra_colores}"
+        instalar="sudo pacman -S --noconfirm"
+        paqueteria="pacman"
+        idx_distro=3
+
+    else
+        echo -e "${rojo} Sistema de paquetería no soportado automáticamente.${borra_colores}"
+        paqueteria="No detectada"
+        exit 1
+    fi
+}
+
+
+#comprobar si se ejecuta en una terminal bash
+terminal_bash() {
+
+    shell_actual="$(ps -p $$ -o comm=)"
+
+    if [ "$shell_actual" != "bash" ]; then
+        echo -e "${amarillo} Este script ${rojo}NO${amarillo} se está ejecutando en Bash.${borra_colores}"
+        echo -e "   Shell detectado: ${rojo}$shell_actual${borra_colores}"
+        echo -e "   Puede ocasionar problemas ya que solo está pensado para bash."
+        echo -e "   ${rojo}No${borra_colores} se procede con la instalación ni la ejecución."
+        echo ""
+        echo -e "${azul} GRACIAS POR UTILIZAR MI SCRIPT${borra_colores}"
+        echo ""
+        exit 1
+    fi
 }
 
 conexion(){
-if ping -c1 google.com &>/dev/null
+#funcion de comprobar conexion a internet
+#para que funciones necesita:
+#   conexion ainternet
+#   la paleta de colores
+#   software: ping
+
+if ping -c1 -W1 8.8.8.8 &>/dev/null
 then
     conexion="SI"
     echo ""
@@ -72,42 +294,20 @@ else
 fi
 }
 
-actualizar_script(){
-archivo_local="dispositivos_conectados.sh" # Nombre del archivo local
-ruta_repositorio="https://github.com/sukigsx/dispositivos_conectados.git" #ruta del repositorio para actualizar y clonar con git clone
-
-# Obtener la ruta del script
-descarga=$(dirname "$(readlink -f "$0")")
-git clone $ruta_repositorio /tmp/comprobar >/dev/null 2>&1
-
-diff $descarga/$archivo_local /tmp/comprobar/$archivo_local >/dev/null 2>&1
 
 
-if [ $? = 0 ]
-then
-    #esta actualizado, solo lo comprueba
-    echo ""
-    echo -e "${verde} El script${borra_colores} $0 ${verde}esta actualizado.${borra_colores}"
-    echo ""
-    chmod -R +w /tmp/comprobar
-    rm -R /tmp/comprobar
-    actualizado="SI"
-else
-    #hay que actualizar, comprueba y actualiza
-    echo ""
-    echo -e "${amarillo} EL script${borra_colores} $0 ${amarillo}NO esta actualizado.${borra_colores}"
-    echo -e "${verde} Se procede a su actualizacion automatica.${borra_colores}"
-    sleep 3
-    mv /tmp/comprobar/$archivo_local $descarga
-    chmod -R +w /tmp/comprobar
-    rm -R /tmp/comprobar
-    echo ""
-    echo -e "${amarillo} El script se ha actualizado, es necesario cargarlo de nuevo.${borra_colores}"
-    echo -e ""
-    read -p " Pulsa una tecla para continuar." pause
-    exit
-fi
-}
+
+
+
+
+
+
+
+
+
+
+
+#Funciones del script
 
 #configurar el fichero de dispositivos
 configurar(){
@@ -505,20 +705,77 @@ done
 }
 
 # EMPIEZA LO GORDO
+#clear
+#echo ""
+#conexion
+#echo ""
+#if [ $conexion = "SI" ]
+#then
+#    #si hay internet
+#    software_necesario
+#    actualizar_script
+#else
+#    #no hay internet
+#    software_necesario
+#fi
+#sleep 2
+#archivo="/home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config"
+#if [ -f "$archivo" ] && grep -q "\[" "$archivo"; then
+#    configurar="SI"
+#else
+#    rm $archivo
+#    configurar="NO"
+#    configurar
+#fi
+#
+#if [ "$1" = "-m" ]
+#then
+#    menu
+#fi
+
+###############333
+#logica de inicio
 clear
-echo ""
+menu_info
 conexion
-echo ""
-if [ $conexion = "SI" ]
-then
-    #si hay internet
-    software_necesario
-    actualizar_script
+if [ $conexion = "SI" ]; then
+    comprobar_actualizaciones
+    if [ $actualizado = "SI" ]; then
+        terminal_bash
+        software_necesario
+        if [ "$software" = "SI" ]; then
+            export software="SI"
+            export conexion="SI"
+            export actualizado="SI"
+            #bash $ruta_ejecucion/ #PON LA RUTA
+        else
+            echo ""
+        fi
+    else
+        terminal_bash
+        software_necesario
+        if [ $software = "SI" ]; then
+            export software="SI"
+            export conexion="SI"
+            export actualizado="NOOOOO"
+            #bash $ruta_ejecucion/ #PON LA RUTA
+        else
+            echo ""
+        fi
+    fi
 else
-    #no hay internet
     software_necesario
+    if [ $software = "SI" ]; then
+        export software="SI"
+        export conexion="NO"
+        export actualizado="No se ha podido comprobar la actualizacion del script"
+        #bash $ruta_ejecucion/ #PON LA RUTA
+    else
+        echo ""
+    fi
 fi
-sleep 2
+
+#comprueba si esta configurado
 archivo="/home/$(whoami)/.config/dispositivos_conectados/dispositivos_conectados.config"
 if [ -f "$archivo" ] && grep -q "\[" "$archivo"; then
     configurar="SI"
@@ -528,17 +785,22 @@ else
     configurar
 fi
 
-if [ "$1" = "-m" ]
-then
-    menu
-fi
+sleep 2
+clear
+menu_info
+
+
+
+
+
+
+
+
+
+
 
 #escanea directo
-clear
-echo -e "${rosa}"; figlet " sukigsx"; echo -e "${borra_colores}"
-echo -e "${verde} Diseñado por sukigsx / Contacto:   scripts@mbbsistemas.es${borra_colores}"
-echo -e "${verde}                                    https://repositorio.mbbsistemas.es${borra_colores}"
-echo ""
+echo "--------------"
 echo -e "${verde} Cargar el menu = ${borra_colores}$0 -m"
 echo ""
 echo ""
